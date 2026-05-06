@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>COUNTDOWN TO BHAVI BUA DAY</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: radial-gradient(circle at center, #0a0a15, #000);
+  color: white;
+  text-align: center;
+  overflow-x: hidden;
+}
+
+/* ?? Animated background */
+body::before {
+  content: "";
+  position: fixed;
+  width: 200%;
+  height: 200%;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,100,150,0.25), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(100,150,255,0.25), transparent 40%);
+  animation: moveBg 12s linear infinite;
+  z-index: -1;
+  filter: blur(60px);
+}
+
+@keyframes moveBg {
+  0% {transform: translate(0,0);}
+  50% {transform: translate(-8%, -8%);}
+  100% {transform: translate(0,0);}
+}
+
+/* Intro */
+#intro {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  letter-spacing: 2px;
+  animation: fadeOut 2s ease 3s forwards;
+}
+
+@keyframes fadeOut {
+  to {opacity: 0; visibility: hidden;}
+}
+
+#main {
+  opacity: 0;
+  animation: fadeIn 2s ease 4s forwards;
+}
+
+@keyframes fadeIn {
+  to {opacity: 1;}
+}
+
+h1 {
+  margin-top: 40px;
+  font-weight: 300;
+}
+
+/* ?? Doors */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding: 30px;
+}
+
+.door {
+  height: 120px;
+  perspective: 1000px;
+  position: relative;
+}
+
+.door-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s ease;
+  cursor: pointer;
+}
+
+.door:hover .door-inner {
+  transform: rotateY(-15deg);
+}
+
+.open .door-inner {
+  transform: rotateY(-100deg);
+}
+
+.door-front,
+.door-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  backface-visibility: hidden;
+  top: 0;
+  left: 0;
+}
+
+.door-front {
+  background: linear-gradient(135deg, #1f1f35, #2e2e55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+.door-back {
+  background: #111;
+  transform: rotateY(180deg);
+}
+
+.locked {
+  opacity: 0.4;
+}
+
+/* ?? Content */
+.content {
+  animation: fadeUp 1.2s ease;
+}
+
+@keyframes fadeUp {
+  from {opacity:0; transform: translateY(30px);}
+  to {opacity:1; transform: translateY(0);}
+}
+
+img {
+  width: 260px;
+  margin-top: 25px;
+  border-radius: 10px;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+/* Typewriter */
+.type {
+  width: 80%;
+  margin: auto;
+  white-space: pre-line;
+  border-right: 2px solid white;
+  overflow: hidden;
+}
+
+/* Extra text */
+.extra {
+  width: 75%;
+  margin: 25px auto;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.85);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 1.5s ease;
+}
+</style>
+</head>
+
+<body>
+
+<div id="intro">COUNTDOWN TO BHAVI BUA DAY</div>
+
+<audio id="bgMusic" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div id="main">
+  <h1>5 Days. Just You.</h1>
+  <div class="grid" id="calendar"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+
+const startDate = new Date("2026-05-01"); // CHANGE
+
+const content = [
+{
+title:"Five days to go",
+password:"melody",
+text:"This is the first time we went out properly. We got drunk, had a lot of fun and I am pretty sure it was the first of many.",
+extra:"Five days to go, I LOVE YOU, CA BHAVI.",
+img:"photo1.jpg",
+song:"https://www.youtube.com/embed/LjhCEhWiKXk?si=nqf6fJ3ygY28GdWE"
+},
+{
+title:"Four Days to go",
+password:"pulse",
+text:"You make everything lighter.",
+extra:"Even on days that dont go right, somehow talking to you makes it okay again. You are the best listener. P.S: First Rakshabandhan with you :P. Four days to go, I love you.",
+img:"photo2.jpg",
+song:"https://www.youtube.com/embed/BrKnJw82Lus?si=Rhbm9Dvtt9UiIgnl"
+},
+{
+title:"Three days to go",
+password:"chocopie",
+text:"FIRST NAVRATRI WITH MY BAE. This was so much fun",
+extra:"I want that all of my remaining dances in this life are whenever i am around you.THREE DAYS TO GO. I love you, Bhavi meri jaan",
+img:"photo3.jpg",
+song:"https://www.youtube.com/embed/aYG6oEUXyuQ?si=rkByOKxM4i1DoHtV"
+},
+{
+title:"Two days to go",
+password:"mars",
+text:"There’s something about us. We fight like crazy, but that's how we love each other too.",
+extra:"This trip had too many firsts to list. It was too good, all thanks to you. I love you.",
+img:"photo4.jpg",
+song:"https://www.youtube.com/embed/YuWB8vYh2Pc?si=G17n9MTGLTS2AJqX"
+},
+{
+title:"A day to go ??",
+password:"5star",
+text:"SOhni kudi da Sohna Kuda",
+extra:"You mean more to me than I can put into words. This is one of many concerts that we will attend. I love you.",
+img:"photo5.jpg",
+song:"https://www.youtube.com/embed/RYXUA32Dx4k?si=StxYgtwOjBsvzqA4",
+final:true
+}
+];
+
+const today = new Date();
+const calendar = document.getElementById("calendar");
+
+/* Start music on first click */
+document.body.addEventListener("click", () => {
+  document.getElementById("bgMusic").play().catch(()=>{});
+}, {once:true});
+
+content.forEach((day, index) => {
+
+  const unlockDate = new Date(startDate);
+  unlockDate.setDate(startDate.getDate() + index);
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "door";
+
+  const inner = document.createElement("div");
+  inner.className = "door-inner";
+
+  const front = document.createElement("div");
+  front.className = "door-front";
+
+  const back = document.createElement("div");
+  back.className = "door-back";
+
+  front.innerHTML = (today >= unlockDate) ? day.title : "??";
+
+  inner.appendChild(front);
+  inner.appendChild(back);
+  wrapper.appendChild(inner);
+
+  if (today >= unlockDate) {
+
+    wrapper.onclick = () => {
+
+      const input = prompt("Enter the word ??");
+
+      if(input !== day.password){
+        alert("Not quite ??");
+        return;
+      }
+
+      wrapper.classList.add("open");
+
+      setTimeout(() => {
+
+        document.body.innerHTML = `
+          <div class="content">
+            <h1>${day.title}</h1>
+            <p class="type" id="text"></p>
+            <img id="photo" src="${day.img}">
+            <p class="extra" id="extra">${day.extra}</p>
+            <br>
+            <iframe width="300" height="170"
+              src="${day.song}"
+              frameborder="0"
+              allowfullscreen>
+            </iframe>
+          </div>
+        `;
+
+        typeWriter(day.text);
+
+        setTimeout(() => {
+          document.getElementById("photo").style.opacity = 1;
+        }, 1500);
+
+        setTimeout(() => {
+          const extra = document.getElementById("extra");
+          extra.style.opacity = 1;
+          extra.style.transform = "translateY(0)";
+        }, 2500);
+
+        if(day.final){
+          setTimeout(() => confetti(), 800);
+        }
+
+      }, 800);
+    };
+
+  } else {
+    wrapper.classList.add("locked");
+    wrapper.onclick = () => alert("Not yet.");
+  }
+
+  calendar.appendChild(wrapper);
+});
+
+function typeWriter(text){
+  let i = 0;
+  const target = document.getElementById("text");
+
+  function typing(){
+    if(i < text.length){
+      target.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(typing, 35);
+    }
+  }
+  typing();
+}
+
+</script>
+
+</body>
+</html>
